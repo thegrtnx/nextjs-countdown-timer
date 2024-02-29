@@ -13,6 +13,7 @@ I'll provide support for other packages with time. Happy to collaborate with any
 
 ## 😍 Features
 
+- Doesn't refresh on page reload
 - Customize hook when the countdown timer reaches zero
 - Easy to set up for real, you can make it work in less than 10sec!
 - Set custom duration with choice

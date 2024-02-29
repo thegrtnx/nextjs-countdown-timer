@@ -25,7 +25,9 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const CountdownTimer = ({ initialSeconds, onTimerEnd }) => {
-    const [seconds, setSeconds] = (0, react_1.useState)(initialSeconds);
+    const isClient = typeof window !== "undefined";
+    const storedTime = isClient ? localStorage.getItem("countdownTime") : null;
+    const [seconds, setSeconds] = (0, react_1.useState)(storedTime ? Number(storedTime) : initialSeconds);
     (0, react_1.useEffect)(() => {
         const interval = setInterval(() => {
             setSeconds((prevSeconds) => {
@@ -34,12 +36,15 @@ const CountdownTimer = ({ initialSeconds, onTimerEnd }) => {
                     onTimerEnd(); // Invoke the callback when the timer reaches zero
                     return 0;
                 }
+                if (isClient) {
+                    localStorage.setItem("countdownTime", String(prevSeconds - 1));
+                }
                 return prevSeconds - 1;
             });
         }, 1000);
         // Cleanup the interval on component unmount
         return () => clearInterval(interval);
-    }, [initialSeconds, onTimerEnd]);
+    }, [initialSeconds, onTimerEnd, isClient]);
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const remainingSeconds = time % 60;

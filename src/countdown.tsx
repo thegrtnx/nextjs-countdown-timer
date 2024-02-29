@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from "react";
-
 interface CountdownTimerProps {
 	initialSeconds: number;
 	onTimerEnd: () => void;
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimerEnd }) => {
-	const [seconds, setSeconds] = useState(initialSeconds);
+	const isClient = typeof window !== "undefined";
+	const storedTime = isClient ? localStorage.getItem("countdownTime") : null;
+	const [seconds, setSeconds] = useState(storedTime ? Number(storedTime) : initialSeconds);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -16,13 +17,16 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimer
 					onTimerEnd(); // Invoke the callback when the timer reaches zero
 					return 0;
 				}
+				if (isClient) {
+					localStorage.setItem("countdownTime", String(prevSeconds - 1));
+				}
 				return prevSeconds - 1;
 			});
 		}, 1000);
 
 		// Cleanup the interval on component unmount
 		return () => clearInterval(interval);
-	}, [initialSeconds, onTimerEnd]);
+	}, [initialSeconds, onTimerEnd, isClient]);
 
 	const formatTime = (time: number) => {
 		const minutes = Math.floor(time / 60);
