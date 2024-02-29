@@ -5,9 +5,15 @@ interface CountdownTimerProps {
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimerEnd }) => {
-	const isClient = typeof window !== "undefined";
-	const storedTime = isClient ? localStorage.getItem("countdownTime") : null;
-	const [seconds, setSeconds] = useState(storedTime ? Number(storedTime) : initialSeconds);
+	const [seconds, setSeconds] = useState(() => {
+		if (typeof window !== "undefined") {
+			// Only use localStorage on the client side
+			const storedTime = localStorage.getItem("countdownTime");
+			return storedTime ? Number(storedTime) : initialSeconds;
+		} else {
+			return initialSeconds;
+		}
+	});
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -17,7 +23,8 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimer
 					onTimerEnd(); // Invoke the callback when the timer reaches zero
 					return 0;
 				}
-				if (isClient) {
+				if (typeof window !== "undefined") {
+					// Only use localStorage on the client side
 					localStorage.setItem("countdownTime", String(prevSeconds - 1));
 				}
 				return prevSeconds - 1;
@@ -26,7 +33,7 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimer
 
 		// Cleanup the interval on component unmount
 		return () => clearInterval(interval);
-	}, [initialSeconds, onTimerEnd, isClient]);
+	}, [initialSeconds, onTimerEnd]);
 
 	const formatTime = (time: number) => {
 		const minutes = Math.floor(time / 60);
