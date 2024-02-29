@@ -1,0 +1,32 @@
+{
+	"name": "react-countdown",
+	"version": "1.0.0",
+	"description": "Countdown to a time with effect after time is completed",
+	"main": "dist/index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/thegrtnx/react-countdown"
+	},
+	"bugs": {
+		"url": "https://github.com/thegrtnx/react-countdown/issues"
+	},
+	"keywords": [
+		"internet",
+		"offline",
+		"online"
+	],
+	"author": "thegrtnx",
+	"license": "MIT",
+	"devDependencies": {
+		"@types/react": "^18.2.57",
+		"@types/react-dom": "^18.2.19",
+		"typescript": "^5.3.3"
+	},
+	"peerDependencies": {
+		"react": "^18.2.0",
+		"react-dom": "^18.2.0"
+	}
+}
