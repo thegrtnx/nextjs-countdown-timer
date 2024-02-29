@@ -25,16 +25,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const react_1 = __importStar(require("react"));
 const CountdownTimer = ({ initialSeconds, onTimerEnd }) => {
-    const [seconds, setSeconds] = (0, react_1.useState)(() => {
-        if (typeof window !== "undefined") {
-            // Only use localStorage on the client side
-            const storedTime = localStorage.getItem("countdownTime");
-            return storedTime ? Number(storedTime) : initialSeconds;
-        }
-        else {
-            return initialSeconds;
-        }
-    });
+    const [seconds, setSeconds] = (0, react_1.useState)(initialSeconds);
+    (0, react_1.useEffect)(() => {
+        const storedTime = parseInt(localStorage.getItem("countdownTime") || "0", 10);
+        const timeToSet = storedTime > 0 ? storedTime : initialSeconds;
+        setSeconds(timeToSet);
+    }, [initialSeconds]);
     (0, react_1.useEffect)(() => {
         const interval = setInterval(() => {
             setSeconds((prevSeconds) => {
@@ -43,16 +39,13 @@ const CountdownTimer = ({ initialSeconds, onTimerEnd }) => {
                     onTimerEnd(); // Invoke the callback when the timer reaches zero
                     return 0;
                 }
-                if (typeof window !== "undefined") {
-                    // Only use localStorage on the client side
-                    localStorage.setItem("countdownTime", String(prevSeconds - 1));
-                }
+                localStorage.setItem("countdownTime", String(prevSeconds - 1));
                 return prevSeconds - 1;
             });
         }, 1000);
         // Cleanup the interval on component unmount
         return () => clearInterval(interval);
-    }, [initialSeconds, onTimerEnd]);
+    }, [onTimerEnd]);
     const formatTime = (time) => {
         const minutes = Math.floor(time / 60);
         const remainingSeconds = time % 60;

@@ -5,15 +5,14 @@ interface CountdownTimerProps {
 }
 
 const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimerEnd }) => {
-	const [seconds, setSeconds] = useState(() => {
-		if (typeof window !== "undefined") {
-			// Only use localStorage on the client side
-			const storedTime = localStorage.getItem("countdownTime");
-			return storedTime ? Number(storedTime) : initialSeconds;
-		} else {
-			return initialSeconds;
-		}
-	});
+	const [seconds, setSeconds] = useState(initialSeconds);
+
+	useEffect(() => {
+		const storedTime = parseInt(localStorage.getItem("countdownTime") || "0", 10);
+		const timeToSet = storedTime > 0 ? storedTime : initialSeconds;
+
+		setSeconds(timeToSet);
+	}, [initialSeconds]);
 
 	useEffect(() => {
 		const interval = setInterval(() => {
@@ -23,17 +22,15 @@ const CountdownTimer: React.FC<CountdownTimerProps> = ({ initialSeconds, onTimer
 					onTimerEnd(); // Invoke the callback when the timer reaches zero
 					return 0;
 				}
-				if (typeof window !== "undefined") {
-					// Only use localStorage on the client side
-					localStorage.setItem("countdownTime", String(prevSeconds - 1));
-				}
+
+				localStorage.setItem("countdownTime", String(prevSeconds - 1));
 				return prevSeconds - 1;
 			});
 		}, 1000);
 
 		// Cleanup the interval on component unmount
 		return () => clearInterval(interval);
-	}, [initialSeconds, onTimerEnd]);
+	}, [onTimerEnd]);
 
 	const formatTime = (time: number) => {
 		const minutes = Math.floor(time / 60);

@@ -23,6 +23,7 @@ I'll provide support for other packages with time. Happy to collaborate with any
 ## The gist
 
 ```jsx
+"use client";
 import React from "react";
 import { CountdownTimer } from "nextjs-countdown-timer";
 
