@@ -1,22 +1,25 @@
 {
-	"name": "react-countdown",
-	"version": "1.0.0",
-	"description": "Countdown to a time with effect after time is completed",
+	"name": "nextjs-countdown-timer",
+	"version": "1.1.0",
+	"description": "Countdown to a time with a hook when the countdown timer reaches zero",
 	"main": "dist/index.js",
 	"scripts": {
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"build": "tsc"
 	},
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/thegrtnx/react-countdown"
+		"url": "git+https://github.com/thegrtnx/nextjs-countdown-timer"
 	},
 	"bugs": {
-		"url": "https://github.com/thegrtnx/react-countdown/issues"
+		"url": "https://github.com/thegrtnx/nextjs-countdown-timer/issues"
 	},
 	"keywords": [
-		"internet",
-		"offline",
-		"online"
+		"countdown",
+		"countdown-timer",
+		"react",
+		"nextjs",
+		"timer"
 	],
 	"author": "thegrtnx",
 	"license": "MIT",
